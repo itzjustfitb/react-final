@@ -8,14 +8,19 @@ function Container({ setBasketActive, basket, setBasket }) {
   const [searchValue, setSearchValue] = useState("");
   const [searchParams, setSearchParams] = useState("");
   const [movies, setMovies] = useState([]);
-  const [cartList, setCartList] = useState([]);
   const [list, setList] = useState([]);
   const url = `https://api.themoviedb.org/3/discover/movie`;
+  const searchUrl =
+    "https://api.themoviedb.org/3/search/movie?include_adult=false&language=en-US";
+
   const getSearch = (search) => {
     setSearchParams(search);
+    axios
+      .get(search === "" ? url : `${searchUrl}&query=${search}`)
+      .then((res) => {
+        setMovies(res.data.results);
+      });
   };
-
-  console.log(basket);
 
   useEffect(() => {
     axios
@@ -28,8 +33,6 @@ function Container({ setBasketActive, basket, setBasket }) {
       })
       .then((res) => setMovies(res.data.results));
   }, []);
-
-  console.log(basket);
 
   return (
     <div className="container">
@@ -46,6 +49,7 @@ function Container({ setBasketActive, basket, setBasket }) {
             )
             .map((movie) => (
               <Card
+                basket={basket}
                 key={movie.id}
                 movie={movie}
                 setList={setList}

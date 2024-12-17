@@ -1,10 +1,10 @@
 import React from "react";
 
-function Card({ movie, setList, list }) {
+function Card({ movie, setList, basket }) {
   return (
     <div className="movie-card">
       <img
-        src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movie.poster_path}`}
         alt="Poster"
       />
       <div className="card-content">
@@ -16,11 +16,15 @@ function Card({ movie, setList, list }) {
           <button
             onClick={() =>
               setList((prev) => {
-                if (!prev.some((item) => item.id === movie.id)) {
+                if (
+                  !prev.some((item) => item.id === movie.id) &&
+                  basket.length === 0
+                ) {
                   return [...prev, movie];
+                } else {
+                  alert("Already at the list");
+                  return prev;
                 }
-                alert("Already at the list");
-                return prev;
               })
             }
           >
